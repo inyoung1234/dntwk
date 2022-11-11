@@ -6,7 +6,8 @@ import javax.persistence.Converter;
 
 @Converter
 public class UserGradeAttributeConverter extends AbstractDbcodeEnumAttributeConverter<UserGrade> {
-    private static final String ENUM_NAME = "사용자 등급";
-    public UserGradeAttributeConverter(){super(false,ENUM_NAME);
+    private static final String enumName = "사용자 등급";
+    public UserGradeAttributeConverter(){
+        super(UserGrade.class,false,enumName);
     }
 }

@@ -31,20 +31,19 @@ class DntwkApplicationTests {
     @Test
     @Transactional
     public void Attribute_converter() {
-        // 테스트 데이터
-        User user = new User();
-
-        user.setUserName("123");
-        user.setUserPwd("123");
-        user.setUserGrade(UserGrade.USER);
-
-        em.persist(user);
-        em.flush();
-        em.clear();
-
-        Query query = em.createNativeQuery("select * from User", User.class);
-        List<User> list = query.getResultList();
-        System.out.println("쿼리 실행 결과"+query.getResultList().get(0));
+//        User user = new User();
+//
+//        user.setUserName("123");
+//        user.setUserPwd("123");
+//        user.setUserGrade(UserGrade.USER);
+//
+//        em.persist(user);
+//        em.flush();
+//        em.clear();
+//
+//        Query query = em.createNativeQuery("select * from User", User.class);
+//        List<User> list = query.getResultList();
+//        System.out.println("쿼리 실행 결과"+query.getResultList().get(0));
 //
 //        // 검증
 //        Object resultGrade = list.get(0).getUserGrade();

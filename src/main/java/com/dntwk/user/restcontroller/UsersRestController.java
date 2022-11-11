@@ -14,14 +14,4 @@ public class UsersRestController {
 
     private final UserService userService;
 
-
-    @GetMapping("/go")
-    public void test(){
-        userService.test();
-    }
-
-    @GetMapping("/go2")
-    public void tset2(){
-        userService.test2();
-    }
 }

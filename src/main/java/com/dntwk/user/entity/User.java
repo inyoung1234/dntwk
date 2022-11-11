@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Date;
 
-@Data
 @NoArgsConstructor
 @Getter
 @Entity
