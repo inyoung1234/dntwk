@@ -15,14 +15,5 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void test(){
-        User user = new User();
-        user.setUserGrade(UserGrade.USER);
-        userRepository.save(user);
-    }
 
-    public void test2(){
-        List<User> ls = userRepository.findAll();
-        System.out.println(ls);
-    }
 }
