@@ -1,8 +1,10 @@
 package com.dntwk.comment.entity;
 
+import com.dntwk.post.entity.Post;
 import com.dntwk.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -16,8 +18,10 @@ public class Comment {
     @Column(name="comment_idx")
     private Long commentIdx;
 
-    @Column
-    private Long commentPostIdx;
+    @Setter
+    @JoinColumn(name="comment_post_idx")
+    @ManyToOne
+    private Post commentPost;
 
     @Column
     private String commentUserIdx;
@@ -33,9 +37,6 @@ public class Comment {
 
     @Column
     private Long commentSuperCommentIdx;
-
-    @Column
-    private String comment;
 
     @Column
     private String commentGrade;
