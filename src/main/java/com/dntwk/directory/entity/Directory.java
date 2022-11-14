@@ -21,25 +21,25 @@ public class Directory {
     @Column(name="directory_sort_num")
     private int directorySubSortNum;
 
-    @Column(name="create_dt")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createDt;
 
-    @Column(name="create_id")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createId;
 
-    @Column(name="create_ip")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createIp;
 
-    @Column(name="mod_dt")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name="mod_id")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modId;
 
-    @Column(name="mod_ip")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modIp;
 
-    @Column(name="mod_descript")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDescript;
 
 }

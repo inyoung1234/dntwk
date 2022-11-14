@@ -2,7 +2,6 @@ package com.dntwk.user.entity;
 
 import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,9 +24,6 @@ public class User {
     @Column(name="user_pwd")
     private String userPwd;
 
-    @Column(name="user_name")
-    private String userName;
-
     @Column(name="user_nickname")
     private String userNickname;
 
@@ -35,22 +31,22 @@ public class User {
     @Column(name="user_grade")
     private UserGrade userGrade;
 
-    @Column(name="create_dt")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createDt;
 
-    @Column(name="create_id")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createId;
 
-    @Column(name="create_ip")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createIp;
 
-    @Column(name="mod_dt")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modDt;
 
-    @Column(name="mod_id")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modId;
 
-    @Column(name="mod_ip")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date modIp;
 
     @Column(name="mod_descript")
