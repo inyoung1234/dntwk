@@ -3,9 +3,10 @@ package com.dntwk.directory_sub.entity;
 import com.dntwk.directory.entity.Directory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -16,9 +17,10 @@ public class DirectorySub {
     @Column(name="directory_sub_idx")
     private Long directorySubIdx;
 
-    @OneToOne
-    @JoinColumn(name="directory_idx")
-    private Directory directory;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name="directory_sub_directory")
+    private Directory directorySubDirectory;
 
     @Column(name="directory_sub_name")
     private String directorySubName;

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @NoArgsConstructor
 @Getter
@@ -22,6 +22,11 @@ public class Comment {
     @JoinColumn(name="comment_post_idx")
     @ManyToOne
     private Post commentPost;
+
+    @Setter
+    @JoinColumn(name="comment_user")
+    @ManyToOne
+    private User commentUser;
 
     @Column
     private String commentUserIdx;

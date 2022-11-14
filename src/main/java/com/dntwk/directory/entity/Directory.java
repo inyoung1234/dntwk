@@ -1,10 +1,13 @@
 package com.dntwk.directory.entity;
 
+import com.dntwk.directory_sub.entity.DirectorySub;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -15,11 +18,14 @@ public class Directory {
     @Column(name="directory_idx")
     private Long directoryIdx;
 
+    @OneToMany(mappedBy = "directorySubDirectory")
+    private List<DirectorySub> directorySubList = new ArrayList<DirectorySub>();
+
     @Column(name="directory_name")
-    private String directorySubName;
+    private String directoryName;
 
     @Column(name="directory_sort_num")
-    private int directorySubSortNum;
+    private int directorySortNum;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDt;
@@ -41,5 +47,6 @@ public class Directory {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date modDescript;
+
 
 }

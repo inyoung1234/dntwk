@@ -4,10 +4,11 @@ import com.dntwk.comment.entity.Comment;
 import com.dntwk.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Blob;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long postIdx;
 
-    @JoinColumn
-    @OneToOne
-    private User user;
+    @Setter
+    @JoinColumn(name="post_user")
+    @ManyToOne
+    private User postUser;
+
+    @OneToMany(mappedBy = "commentPost")
+    private List<Comment> commentList = new ArrayList<Comment>();
 
     @Column
     private String postName;
@@ -48,6 +53,4 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modIp;
 
-    @OneToMany(mappedBy = "commentPost")
-    private List<Comment> commentList = new ArrayList<Comment>();
 }

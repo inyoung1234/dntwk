@@ -2,11 +2,15 @@ package com.dntwk.user.entity;
 
 import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
+import com.dntwk.comment.entity.Comment;
+import com.dntwk.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -17,6 +21,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_idx")
     private Long userIdx;
+
+    @OneToMany(mappedBy = "commentUser")
+    private List<Comment> commentList = new ArrayList<Comment>();
+
+    @OneToMany(mappedBy = "postUser")
+    private List<Post> postList = new ArrayList<Post>();
 
     @Column(name="user_id", unique = true)
     private String userId;
@@ -51,5 +61,6 @@ public class User {
 
     @Column(name="mod_descript")
     private Date modDescript;
+
 
 }
