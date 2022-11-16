@@ -3,9 +3,10 @@ package com.dntwk.post.entity;
 import com.dntwk.comm.BaseEntity;
 import com.dntwk.comment.entity.Comment;
 import com.dntwk.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@SuperBuilder
+@AllArgsConstructor
 @Getter
 @Entity
 public class Post extends BaseEntity {

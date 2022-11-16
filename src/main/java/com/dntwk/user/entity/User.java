@@ -4,14 +4,18 @@ import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
 import com.dntwk.comment.entity.Comment;
 import com.dntwk.post.entity.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Getter
 @Entity
 public class User {

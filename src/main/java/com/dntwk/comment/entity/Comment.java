@@ -3,12 +3,16 @@ package com.dntwk.comment.entity;
 import com.dntwk.comm.BaseEntity;
 import com.dntwk.post.entity.Post;
 import com.dntwk.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Getter
 @Entity
 public class Comment extends BaseEntity {

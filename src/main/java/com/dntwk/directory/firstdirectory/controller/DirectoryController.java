@@ -1,6 +1,6 @@
-package com.dntwk.directory.controller;
+package com.dntwk.directory.firstdirectory.controller;
 
-import com.dntwk.directory.service.DirectoryService;
+import com.dntwk.directory.firstdirectory.service.DirectoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
