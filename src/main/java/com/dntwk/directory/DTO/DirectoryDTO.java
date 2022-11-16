@@ -1,4 +1,4 @@
-package com.dntwk.directory.firstdirectory.DTO;
+package com.dntwk.directory.DTO;
 
 import lombok.*;
 

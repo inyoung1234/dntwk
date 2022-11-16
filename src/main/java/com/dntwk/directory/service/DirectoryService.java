@@ -1,8 +1,8 @@
-package com.dntwk.directory.firstdirectory.service;
+package com.dntwk.directory.service;
 
 import com.dntwk.comm.ApiStatus;
-import com.dntwk.directory.firstdirectory.VO.CreateDirectoryDTO;
-import com.dntwk.directory.firstdirectory.VO.ModDirectoryDTO;
+import com.dntwk.directory.DTO.CreateDirectoryDTO;
+import com.dntwk.directory.DTO.ModDirectoryDTO;
 import com.dntwk.directory.firstdirectory.repository.DirectoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

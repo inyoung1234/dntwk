@@ -1,6 +1,6 @@
-package com.dntwk.directory.firstdirectory.controller;
+package com.dntwk.directory.controller;
 
-import com.dntwk.directory.firstdirectory.service.DirectoryService;
+import com.dntwk.directory.service.DirectoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,6 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 public class DirectoryController {
 
     private final DirectoryService directoryService;
-
 
 }

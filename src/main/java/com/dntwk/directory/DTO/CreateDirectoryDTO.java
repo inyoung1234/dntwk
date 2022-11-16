@@ -1,4 +1,4 @@
-package com.dntwk.directory.firstdirectory.VO;
+package com.dntwk.directory.DTO;
 
 import com.dntwk.directory.firstdirectory.entity.FirstDirectory;
 import lombok.AllArgsConstructor;

@@ -2,6 +2,7 @@ package com.dntwk.post.entity;
 
 import com.dntwk.comm.BaseEntity;
 import com.dntwk.comment.entity.Comment;
+import com.dntwk.directory.seconddirectory.entity.SecondDirectory;
 import com.dntwk.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +35,18 @@ public class Post extends BaseEntity {
         }
         this.postUser=postUser;
         getPostUser().getPostList().add(this);
+    }
+
+    @ManyToOne
+    @JoinColumn
+    private SecondDirectory postSecondDirectory;
+
+    public void setpostSecondDirectory(SecondDirectory postSecondDirectory){
+        if(postSecondDirectory!=null){
+            this.getPostSecondDirectory().getPostList().remove(this);
+        }
+        this.postSecondDirectory=postSecondDirectory;
+        getPostSecondDirectory().getPostList().add(this);
     }
 
     @OneToMany(mappedBy = "commentPost")

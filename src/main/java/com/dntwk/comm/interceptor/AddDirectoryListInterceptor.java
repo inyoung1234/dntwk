@@ -1,6 +1,6 @@
 package com.dntwk.comm.interceptor;
 
-import com.dntwk.directory.firstdirectory.service.DirectoryService;
+import com.dntwk.directory.service.DirectoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
