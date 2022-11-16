@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,27 +39,4 @@ public class User {
     @Convert(converter= UserGradeAttributeConverter.class)
     @Column(name="user_grade")
     private UserGrade userGrade;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createIp;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modIp;
-
-    @Column(name="mod_descript")
-    private Date modDescript;
-
-
 }

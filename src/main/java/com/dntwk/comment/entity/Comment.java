@@ -1,32 +1,46 @@
 package com.dntwk.comment.entity;
 
+import com.dntwk.comm.BaseEntity;
 import com.dntwk.post.entity.Post;
 import com.dntwk.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class Comment {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_idx")
+    @Column(name = "comment_idx")
     private Long commentIdx;
 
-    @Setter
-    @JoinColumn(name="comment_post_idx")
+    @JoinColumn(name = "comment_post_idx")
     @ManyToOne
     private Post commentPost;
 
-    @Setter
-    @JoinColumn(name="comment_user")
+    public void setCommentPost(Post commentPost) {
+        if (this.commentPost != null) {
+            this.commentPost.getCommentList().remove(this);
+        }
+        this.commentPost = commentPost;
+        getCommentPost().getCommentList().add(this);
+    }
+
+    @JoinColumn(name = "comment_user")
     @ManyToOne
     private User commentUser;
+
+    public void setCommentUser(User commentUser) {
+        if (this.commentUser != null) {
+            this.commentUser.getCommentList().remove(this);
+        }
+        this.commentUser = commentUser;
+        getCommentUser().getCommentList().add(this);
+
+    }
 
     @Column
     private String commentUserIdx;
@@ -45,22 +59,4 @@ public class Comment {
 
     @Column
     private String commentGrade;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createIp;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modDt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modId;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modIp;
 }

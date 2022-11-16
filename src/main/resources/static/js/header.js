@@ -1,11 +1,8 @@
-const header = document.querySelector(".header");
+const sidebar = document.querySelector("#sidebar");
 const headerHeight = header.offsetHeight;
 
-window.onscroll = function () {
-    let windowTop = window.scrollY;
-    if (windowTop >= headerHeight) {
-        header.classList.add("drop");
-    } else {
-        header.classList.remove("drop");
-    }
-};
+window.addEventListener('onload',function (){
+    sidebar.style.position="sticky";
+    sidebar.style.top=headerHeight+"px";
+    sidebar.style.alignSelf="baseline";
+})
