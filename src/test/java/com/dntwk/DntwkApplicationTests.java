@@ -3,6 +3,7 @@ package com.dntwk;
 import com.dntwk.comm.converter.EnumUserGradeException;
 import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
+import com.dntwk.directory.entity.Directory;
 import com.dntwk.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.EnumSet;
 import java.util.List;
@@ -31,22 +33,16 @@ class DntwkApplicationTests {
     @Test
     @Transactional
     public void Attribute_converter() {
-//        User user = new User();
-//
-//        user.setUserName("123");
-//        user.setUserPwd("123");
-//        user.setUserGrade(UserGrade.USER);
-//
-//        em.persist(user);
-//        em.flush();
-//        em.clear();
-//
-//        Query query = em.createNativeQuery("select * from User", User.class);
-//        List<User> list = query.getResultList();
-//        System.out.println("쿼리 실행 결과"+query.getResultList().get(0));
-//
-//        // 검증
-//        Object resultGrade = list.get(0).getUserGrade();
-//        assertEquals("User", resultGrade);
+
+        TypedQuery<Directory> query = em.createQuery("select d from Directory as d", Directory.class);
+        List<Directory> directoryList = query.getResultList();
+
+        for(Directory directory : directoryList){
+            if(directory.getDirectoryName().equals("1")){
+                //1
+                directory.modDirectoryName("2");
+            }
+        }
     }
+
 }

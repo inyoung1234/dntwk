@@ -1,25 +1,31 @@
 
-body{
-    margin:0px;
+body {
+    margin: 0px;
 }
+
 #jb-container {
     width: auto;
     margin: auto;
 }
+
 #header {
     padding: 20px;
     margin-bottom: 20px;
     border: 1px solid #bcbcbc;
+    position: sticky;
+    top:0;
 }
 
-#middle-container{
+#middle-container {
     display: flex;
 }
+
 #content {
     padding: 20px;
     margin-bottom: 20px;
     border: 1px solid #bcbcbc;
 }
+
 #sidebar {
     min-width: 260px;
     padding: 20px;
@@ -32,33 +38,23 @@ body{
     padding: 20px;
     border: 1px solid #bcbcbc;
 }
-#menu-icon-container{
+
+#menu-icon-container {
     position: fixed;
     top: 0.5rem;
     right: 0.5rem;
 }
-#menu-icon-container{
-    display: none;
-}
-.header.drop {
-    position: fixed;
-    animation: dropHeader 0.3s;
-}
 
-@keyframes dropHeader {
-    0% {
-        top: -5rem;
-    }
-    100% {
-        top: 0;
-    }
+#menu-icon-container {
+    display: none;
 }
 
 @media all and ( max-width: 60rem ) {
     #sidebar {
         display: none;
     }
-    #menu-icon-container{
+
+    #menu-icon-container {
         display: block;
     }
 }
