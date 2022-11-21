@@ -6,7 +6,7 @@
     <link rel="shortcut icon" type="image/x-icon"
           href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
     <title>웃자</title>
-        <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <div id="jb-container">
@@ -42,13 +42,30 @@
                 ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
             <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
+
+        <!--로직을 사용 하고 싶지 않았지만 어떻게 해야 계층적인 구조를 레이아웃에 적용 할 수 있을 지 모르겠다.-->
+        <!--순수 타임리프 버전.
+        보기 지저분하고 너무 많은 반복이 이루어진다.-->
+        <!--해결법 1. 자바스크립트로 작성 하게 되면 코드는 간결해질 수 있지만 html 안에 자바스크립트 코드가 들어가는 것은 옳지 않다고 생각한다.-->
+        <!--해결법 2. 계층적인 구조를 포기한다-->
+        <!--해결법 3. 디렉토리의 구조를 미리 만든다.(확장성 포기)-->
         <div id="sidebar" th:if="${directoryList}">
-            <ul>
-                <li th:each="${directoryList}">
-                    <li th:each="${directoryList.subDirecory}">
+            <ul th:each="directores : ${directoryList}">
+                <li th:if="${directores.directoryLayer}==0">
+                    <a th:href="|/post/${directores.directoryName}|">
+                        <span th:text="${directores.directoryName}"></span>
+                    </a>
+                    <ul th:if="${directoresStat.size}!=${directoresStat.count}" th:each="directores2 : ${directoryList}">
+                        <li th:if="${directores2.directoryLayer}==1 and ${directores.directoryName}==${directores2.superDirectoryName}">
+                            <a th:href="|/post/${directores2.directoryName}|">
+                                <span th:text="${directores2.directoryName}"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
+
     </div>
     <div id="footer">
         <p>Copyright</p>
@@ -56,5 +73,4 @@
 </div>
 </body>
 <script src="/js/header.js"></script>
-<script src="/js/main.js"></script>
 </html>

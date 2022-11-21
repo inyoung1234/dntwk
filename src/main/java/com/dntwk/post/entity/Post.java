@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,6 @@ public class Post extends BaseEntity {
     @JoinColumn
     private Directory postDirectory;
 
-
     @OneToMany(mappedBy = "commentPost")
     private List<Comment> commentList = new ArrayList<Comment>();
 
@@ -49,5 +47,5 @@ public class Post extends BaseEntity {
     private String postName;
 
     @Lob
-    private Blob postContents;
+    private String postContents;
 }

@@ -23,21 +23,21 @@ public class DirectoryService {
     private final DirectoryRepository directoryRepository;
     private final EntityManagerFactory entityManagerFactory;
 
+
     public List<SortedDirectoryListDTO> findSortedDirectoryList() {
         EntityManager em = entityManagerFactory.createEntityManager();
         TypedQuery<SortedDirectoryListDTO> query =
-                em.createQuery("Select new com.dntwk.directory.dto.SortedDirectoryListDTO(d.directoryName,d.directoryLayer) " +
+                em.createQuery("Select new com.dntwk.directory.dto.SortedDirectoryListDTO(d.directoryName,d.directoryLayer,d.superDirectoryName) " +
                         "FROM Directory d", SortedDirectoryListDTO.class);
         List<SortedDirectoryListDTO> list = query.getResultList();
         em.close();
         return list;
     }
 
-    /*1. 객체가 있는지 확인
-     * 2. superName이 유효한지 확인 - 아 여기서 단일테이블로 만든 단점이 또..
-     * 3. 넣기*/
+
     public ApiStatus createDirectory(CreateDirectoryDTO createDirectoryDTO) {
         Directory directory = directoryRepository.findByDirectoryNameEqualsAndDirectoryLayerEquals(createDirectoryDTO.getDirectoryName(), createDirectoryDTO.getDirectoryLayer());
+        //보기 지저분함. 코드 이쁘게 바꿀것.
         if (directory == null) {
             if (createDirectoryDTO.getDirectoryLayer()!=0) {
                 List<SortedDirectoryListDTO> list = this.findSortedDirectoryList();
