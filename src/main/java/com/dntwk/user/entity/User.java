@@ -1,5 +1,6 @@
 package com.dntwk.user.entity;
 
+import com.dntwk.comm.BaseEntity;
 import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
 import com.dntwk.comment.entity.Comment;
@@ -18,7 +19,7 @@ import java.util.List;
 @SuperBuilder
 @Getter
 @Entity
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

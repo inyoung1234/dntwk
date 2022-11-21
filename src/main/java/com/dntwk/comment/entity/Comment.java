@@ -47,16 +47,13 @@ public class Comment extends BaseEntity {
     }
 
     @Column
-    private String commentUserIdx;
-
-    @Column
-    private String commentUserNickname;
-
-    @Column
     private String commentContent;
 
     @Column
     private boolean commentHide;
+
+    @Column
+    private boolean commentDeleted;
 
     @Column
     private Long commentSuperCommentIdx;

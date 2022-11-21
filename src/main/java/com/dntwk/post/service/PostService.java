@@ -18,7 +18,7 @@ public class PostService {
         return subPostService.getPost(postIdx);
     }
 
-    public ApiStatus createPost(CreatePostDTO postDTO){
-        return ApiStatus.FAIL;
+    public OnePostDTO createPost(CreatePostDTO postDTO){
+        return subPostService.createPost(postDTO);
     }
 }
