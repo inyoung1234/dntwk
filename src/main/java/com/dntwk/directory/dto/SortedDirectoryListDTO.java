@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class SortedDirectoryListDTO {
     private String directoryName;
     private Integer directoryLayer;
+    private String superDirectoryName;
 }

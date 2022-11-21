@@ -1,6 +1,7 @@
 package com.dntwk.comm;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -9,6 +10,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
+
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @MappedSuperclass

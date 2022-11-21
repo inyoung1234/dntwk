@@ -18,6 +18,6 @@ public interface DirectoryRepository extends JpaRepository<Directory,Long> {
     void deleteByDirectoryNameEqualsAndDirectoryLayer(String directoryName, Integer directoryLayer);
 
     @Modifying(clearAutomatically = true)
-    @Query("update Directory as d set d.directorySortedNum = d.directorySortedNum - 1 where d.superDirectoryName=:superDirectoryName and d.directorySortedNum>:directorySortedNum")
+    @Query("update Directory as d set d.directorySortedNum = (d.directorySortedNum - 1) where d.superDirectoryName=:superDirectoryName and d.directorySortedNum>:modDirectorySortedNum")
     void sortDirectoryWhenRemove(@Param("superDirectoryName") String superDirectoryName,@Param("modDirectorySortedNum") Integer directorySortedNum);
 }

@@ -5,6 +5,7 @@ import com.dntwk.comm.PostRequestIdentifier;
 import com.dntwk.directory.dto.ModDirectoryDTO;
 import com.dntwk.directory.dto.SortedDirectoryListDTO;
 import com.dntwk.directory.service.DirectoryService;
+import com.dntwk.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class DirectoryController {
     public List<SortedDirectoryListDTO> findSortedDirectoryList(){
         return directoryService.findSortedDirectoryList();
     }
+
 
     @PostMapping("/directory/{value}")
     public ApiStatus modDirectory(@PathVariable("value") PostRequestIdentifier postRequestIdentifier,ModDirectoryDTO originalDirectoryDTO,ModDirectoryDTO modDirectoryDTO){
