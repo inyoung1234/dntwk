@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
+    <title>웃자(디렉토리 관리)</title>
+    <style>
+        .container{
+            padding: 8px;
+            border-radius : 1px;
+            background: #E7EDF3;
+        }
+        .container.first{
+            background: white;
+        }
+        div{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div class="header" id="header">
+    <h2>Responsive Layout</h2>
+</div>
+<div>
+
+    <div>
+        카테고리 관리
+    </div>
+
+    <div class="container">
+        <div class="first">
+            <div>이미지</div>
+            <div> 분류 전체 보기</div>
+        </div>
+        <div th:if="${categoryList}" th:each="categories : ${categoryList}" class="layer.first">
+            <div>이미지</div>
+            <div th:text="${categories.categoryName}">이름</div>
+            <div>버튼</div>
+            <div th:if="${categories.subCategoryList}" th:each="subCategories : ${categories.subCategoryList}"
+                 class="layer.2">
+                <div>이미지</div>
+                <div th:text="${subCategories.categoryName}">이름</div>
+                <div>버튼</div>
+            </div>
+        </div>
+        <div>
+            <div>+이미지</div>
+            <div>
+                카테고리 추가
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+
+    let count = 0;
+
+    const selectedDirectory = document.querySelector("#selected-directory");
+    const sidebar = document.querySelector("#sidebar");
+
+    function select() {
+        selectedDirectory.innerText = this.innerText;
+    }
+
+
+    function createOne() {
+        let newDirectoryLi = document.createElement("textarea");
+        newDirectoryLi.class = "newDirectory." + count;
+        let newDirectory = document.createElement("ul");
+        newDirectory.append(newDirectoryLi)
+        sidebar.append(newDirectory);
+        newDirectoryLi.focus();
+        count++;
+    }
+</script>
+</html>

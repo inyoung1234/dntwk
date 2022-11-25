@@ -2,7 +2,7 @@ package com.dntwk.post.entity;
 
 import com.dntwk.comm.BaseEntity;
 import com.dntwk.comment.entity.Comment;
-import com.dntwk.directory.entity.Directory;
+import com.dntwk.category.entity.Category;
 import com.dntwk.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class Post extends BaseEntity {
 
     @ManyToOne
     @JoinColumn
-    private Directory postDirectory;
+    private Category postCategory;
 
     @OneToMany(mappedBy = "commentPost")
     private List<Comment> commentList = new ArrayList<Comment>();

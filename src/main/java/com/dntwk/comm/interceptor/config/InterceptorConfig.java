@@ -1,8 +1,6 @@
 package com.dntwk.comm.interceptor.config;
 
 import com.dntwk.comm.interceptor.AddDirectoryListInterceptor;
-import com.dntwk.directory.repository.DirectoryRepository;
-import com.dntwk.directory.service.DirectoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

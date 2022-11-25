@@ -5,7 +5,7 @@ import lombok.Getter;
 public enum PostRequestIdentifier {
     NAME("NAME"),
     LAYER("LAYER"),
-    SORTED("SORTED"),
+    SORT("SORT"),
     CONTENTS("CONTENTS");
 
     @Getter

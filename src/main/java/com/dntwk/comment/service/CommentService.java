@@ -37,7 +37,7 @@ public class CommentService {
     }
 
     public List<CommentDTO> createComment(CreateCommentDTO createCommentDTO){
-        //중복방지
+        //연타방지
         if(commentRepository.findByCreateDtIsGreaterThanAndCreateIp(new Date(createCommentDTO.getCreateDt().getTime()-10000),
                 createCommentDTO.getCreateIp())!=null){
             return getCommentList(createCommentDTO.getCommentPost());

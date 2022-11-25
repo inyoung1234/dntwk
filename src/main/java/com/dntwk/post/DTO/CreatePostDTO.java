@@ -16,7 +16,7 @@ public class CreatePostDTO {
 
     private Long postUser;
 
-    private Long postDirectory;
+    private String postCategory;
 
     private String postName;
 
