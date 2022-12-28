@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   thymeleaf:
     cache: false
     suffix: .html
@@ -27,3 +30,7 @@ spring:
       basePath: /api
 server:
   port: 8080
+jwt:
+  secret: aksueaobhieaipgagiohagnjaslqmbozsejmaskasdgrwg
+  access-token-expire-time: 1800000
+  refresh-token-expire-time: 2592000000

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <title>웃자</title>
+</head>
+<body>
+<button onclick="asdasd()">asdasd</button>
+<script>
+    function asdasd() {
+        const dto = {
+            email: "admin", password: "9348124"
+        }
+        fetch("/auth/login", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(dto)
+        }).then(e => console.log(e.valueOf()));
+    }
+
+    function send123(){
+        return fetch('/post', {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify({})
+        }).then(res => {
+            if (res.status === 200) {
+                resolve();
+            } else if (res.status === 401) {
+                reject();
+            }
+        });
+    }
+
+    function reissue(){
+         return fetch("/auth/reissue", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        }).then(res => {
+             if (res.status === 200) {
+                 resolve();
+             } else {
+                 reject();
+             }
+         });
+    }
+
+    send123().then(()=>alert("성공"))
+        .catch(()=>reissue().then(()=>send123).catch(()=>alert("인증이 없어요..")));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/css/uikit.min.css"/>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
+    <title>웃자</title>
+</head>
+<script>
+    let query = window.location.search;
+    let param = new URLSearchParams(query);
+    let path = param.get('path');
+
+    console.log(path);
+
+    fetch("/auth/reissue/", {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json;charset=utf-8"
+        },
+        body: JSON.stringify({})
+    }).then(res => {
+        if (res.status === 200) {
+            location.replace(path);
+        } else {
+            alert(res);
+        }
+    }).catch(err => {
+        console.log(err);
+    });
+</script>
+
+</html>

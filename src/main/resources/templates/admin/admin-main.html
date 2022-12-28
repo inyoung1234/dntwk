@@ -5,10 +5,466 @@
           content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
     <link rel="shortcut icon" type="image/x-icon"
           href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
-    <title>웃자</title>
+    <title>웃자(관리)</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .category-wrap {
+            background: #E7EDF3;
+            padding: 10px;
+            width: 50%;
+            display: inline-block;
+        }
+
+        .category-list {
+            margin-bottom: 3px;
+        }
+
+        .category {
+            background: #fff;
+            border: 1px solid #E0E5EE;
+            align-items: center;
+            height: 52px;
+            text-align: left;
+        }
+
+        .category * {
+            pointer-events: none;
+        }
+
+        .category.second {
+            margin-left: 20px;
+        }
+
+        .category.first.dragging, .category.second.dragging {
+            border: 1px solid red;
+        }
+
+        .category.first.target, .category.second.target {
+            border-top: 2px solid red;
+        }
+
+        .category-img {
+            position: relative;
+            float: left;
+            padding: 15px;
+            background: #FAFBFC;
+        }
+
+        .category-name {
+            padding-left: 20px;
+            display: inline-block;
+            margin-top: 16px;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
-<div>사이드바 관리</div>
-<div>유저 admin권한 요청 목록</div>
+<div class="header" id="header">
+    <h2>웃자</h2>
+</div>
+<div>
+    <div>카테고리 관리</div>
+    <div class="category-wrap">
+        <div th:if="${categoryList}" th:each="categories : ${categoryList}" class="category-list">
+            <div class="category first" draggable="true">
+                <div class="category-img">
+                    <img src="https://i.ibb.co/QcPLCg3/menu-icon-removebg-preview.png"
+                         alt="menu-icon-removebg-preview"
+                         width="10px">
+                </div>
+                <div class="category-name"
+                     th:data-category-name="${categories.categoryName}"
+                     th:data-category-layer="FIRST"
+                     th:data-category-sorted-num="${categoriesStat.count}"
+                     th:data-super-category-name="none">
+                    <input type="text" style="display: none"
+                           onblur="switchInputToSpanForModify(this)">
+                    <span th:text="${categories.categoryName}">123123</span>
+                </div>
+            </div>
+            <div th:if="${categories.subCategoryList}"
+                 draggable="true"
+                 th:each="subCategories : ${categories.subCategoryList}"
+                 class="category second">
+                <div class="category-img">
+                    <img src="https://i.ibb.co/QcPLCg3/menu-icon-removebg-preview.png"
+                         alt="menu-icon-removebg-preview"
+                         width="10px">
+                </div>
+                <div class="category-name"
+                     th:data-category-name="${subCategories.categoryName}"
+                     th:data-category-layer="SECOND"
+                     th:data-category-sorted-num="${subCategoriesStat.count}"
+                     th:data-super-category-name="${categories.categoryName}">
+                    <input type="text" style="display: none"
+                           onblur="switchInputToSpanForModify(this)">
+                    <span th:text="${subCategories.categoryName}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="category-list" onclick="createOne()" id="add-category">
+            <div class="first-category">
+                <div class="category-img">
+                    <img src="https://i.ibb.co/QcPLCg3/menu-icon-removebg-preview.png"
+                         alt="menu-icon-removebg-preview"
+                         width="10px">
+                </div>
+                <span class="category-name" onclick="createCategoryDiv()">카테고리 추가</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="category-list spare" id="category-list-spare"></div>
+<button onclick="sendModRequest()">수정완료</button>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script>
+    let createCount = 0;
+    const categoryAddDiv = document.getElementById("add-category");
+    const createDTOList = [];
+    const modifyDTOList = [];
+    const requestCategoryDTO = {
+        modifyCategoryDTOList: modifyDTOList,
+        createCategoryDTOList: createDTOList
+    };
+
+    function sendModRequest() {
+        return fetch("/categories", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(requestCategoryDTO)
+        }).then(res=>{
+            if(res.status===200){
+                resolve();
+            } else if (res.status===401){
+                reject();
+            }
+        }).catch(()=>reissue().then(()=>sendModRequest()));
+    }
+
+    function reissue(){
+        return fetch("/auth/reissue", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        }).then(res => {
+            if (res.status === 200) {
+                resolve();
+            } else {
+                alert("인증이 없어요..")
+                reject();
+            }
+        });
+    }
+
+    function createCategoryDiv(){
+        const abc2 = $('.first').clone(true,true)[0];
+        categoryAddDiv.before(abc2);
+        createDTOList.push(new MakeCreateCategoryDTO("new" + createCount, "FIRST"));
+        createCount++;
+    }
+
+    function switchSpanToInputForModify(obj) {
+        obj.children[1].children[0].style.display = "block";
+        obj.children[1].children[1].style.display = "none";
+        obj.children[1].children[0].focus();
+    }
+
+    function switchInputToSpanForModify(obj) {
+        obj.parentElement.children[1].style.display = "block";
+        obj.parentElement.children[0].style.display = "none";
+        if (obj.parentElement.children[0].value !== "" && obj.parentElement.children[0].value != null) {
+            obj.parentElement.children[1].innerText = obj.parentElement.children[0].value;
+        }
+        modifyDTOList.push(new MakeModifyCategoryDTO().setPostRequestIdentifier("NAME").setCategoryName(obj.parentElement.dataset.categoryName)
+            .setModCategoryName(obj.parentElement.children[0].value)
+            .setCategoryLayer(obj.parentElement.dataset.superCategoryName)
+        )
+        obj.parentElement.dataset.categoryName = obj.parentElement.children[0].value;
+    }
+
+    function MakeCreateCategoryDTO(categoryName, categoryLayer) {
+        this.categoryName = categoryName;
+        this.categoryLayer = categoryLayer;
+    }
+
+    function MakeModifyCategoryDTO(postRequestIdentifier, categoryName, categoryLayer, superCategoryName, categorySortedNum, modCategoryName
+        , modCategoryLayer, modSuperCategoryName, modCategorySortedNum) {
+        this.postRequestIdentifier = postRequestIdentifier;
+        this.categoryName = categoryName;
+        this.categoryLayer = categoryLayer;
+        this.superCategoryName = superCategoryName;
+        this.categorySortedNum = categorySortedNum;
+        this.modCategoryName = modCategoryName;
+        this.modCategoryLayer = modCategoryLayer;
+        this.modSuperCategoryName = modSuperCategoryName;
+        this.modCategorySortedNum = modCategorySortedNum;
+        this.setPostRequestIdentifier = (value) => {
+            this.postRequestIdentifier = value;
+            return this;
+        };
+        this.setCategoryName = (value) => {
+            this.categoryName = value;
+            return this;
+        };
+        this.setCategoryLayer = (value) => {
+            this.categoryLayer = value;
+            return this;
+        };
+        this.setSuperCategoryName = (value) => {
+            this.superCategoryName = value;
+            return this;
+        };
+        this.setCategorySortedNum = (value) => {
+            this.categorySortedNum = value;
+            return this;
+        };
+        this.setModCategoryName = (value) => {
+            this.modCategoryName = value;
+            return this;
+        };
+        this.setModCategoryLayer = (value) => {
+            this.modCategoryLayer = value;
+            return this;
+        };
+        this.setModSuperCategoryName = (value) => {
+            this.modSuperCategoryName = value;
+            return this;
+        };
+        this.setModCategorySortedNum = (value) => {
+            this.modCategorySortedNum = value;
+            return this;
+        };
+    }
+
+    const _$ = (select) => document.querySelectorAll(select);
+    const draggables = _$('.category');
+    const containers = _$('.category-list');
+    const rootContainer = document.querySelector(".category-wrap");
+
+    draggables.forEach(elements => {
+        elements.addEventListener('click',(e)=>{
+            switchSpanToInputForModify(e.target);
+        })
+
+        elements.addEventListener('dragstart', () => {
+            elements.classList.add('dragging');
+        });
+
+        elements.addEventListener('dragend', () => {
+            elements.classList.remove('dragging');
+        });
+    });
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.category:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - (box.height / 2);
+            if (offset < 0 && offset > closest.offset) {
+                return {offset: offset, element: child}
+            } else {
+                return closest
+            }
+        }, {offset: Number.NEGATIVE_INFINITY}).element
+    }
+
+    function setTargetBorderStyle(el, y) {
+        const box = el.getBoundingClientRect();
+        if (y - box.top > box.height / 2) {
+            el.style.borderTop = "1px solid #E0E5EE"
+            el.style.borderBottom = "2px solid red";
+        } else {
+            el.style.borderTop = "2px solid red";
+            el.style.borderBottom = "1px solid #E0E5EE";
+        }
+    }
+
+    containers.forEach(container => {
+        container.addEventListener('dragleave', e => {
+            const draggableElements = [...container.querySelectorAll('.category:not(.dragging)')];
+            draggableElements.forEach(el => {
+                el.style.border = "1px solid #E0E5EE";
+            });
+        })
+
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            if (!e.target.className.endsWith("dragging")) setTargetBorderStyle(e.target, e.clientY);
+        })
+
+        container.addEventListener('drop', e => {
+            e.preventDefault()
+            const afterElement = getDragAfterElement(container, e.clientY) ?? container.nextElementSibling;
+            const draggable = document.querySelector('.dragging');
+            const draggableParent = draggable.parentElement;
+            const modifiedCategory = draggable.children[1].dataset;
+            const modifyCategoryDTO = new MakeModifyCategoryDTO()
+                .setCategoryName(modifiedCategory.categoryName)
+                .setCategoryLayer(modifiedCategory.categoryLayer)
+                .setCategorySortedNum(modifiedCategory.categorySortedNum)
+                .setSuperCategoryName(modifiedCategory.superCategoryName);
+
+            e.target.style.border = "1px solid #E0E5EE";
+
+
+            if (draggable.parentElement === afterElement.parentElement && draggable.parentElement.firstElementChild === draggable) {
+                console.log("자신의 하위로는 이동 못함");
+            } else if (draggable.parentElement.childElementCount > 1 && afterElement.className.endsWith("second") && draggable.className.endsWith("first dragging")) {
+                console.log("하위를 가지고 하위로 이동 못함.")
+            } else if (draggable.parentElement.childElementCount === 1 && afterElement.className.endsWith("second") && draggable.className.endsWith("first dragging")) {
+                //하위를 가지고 있지 않은 상위가 하위로 이동
+                draggable.className="category second";
+
+                modifyCategoryDTO.setPostRequestIdentifier("LAYER")
+                    .setCategoryLayer("SECOND");
+
+                modifiedCategory.categoryLayer = "SECOND";
+                modifiedCategory.superCategoryName = draggable.parentElement.children[0].children[1].dataset.categoryName;
+
+                draggable.parentElement.remove();
+
+                container.insertBefore(draggable, afterElement);
+
+
+                let sortCount = 0;
+                for (let el of rootContainer.children) {
+                    el.children[0].children[1].dataset.categorySortedNum = ++sortCount;
+                }
+                sortCount = 0;
+                for (let el of container.children) {
+                    if (!el.isEqualNode(container.children[0])) {
+                        console.log(el);
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+                modifyCategoryDTO.setModSuperCategoryName(modifiedCategory.superCategoryName);
+
+                modifyDTOList.push(modifyCategoryDTO);
+
+
+            } else if (draggable.className.endsWith("first dragging") && afterElement.className.endsWith("first")) {
+                //상위 순서 변경
+                modifyCategoryDTO.setPostRequestIdentifier("SORT");
+
+                rootContainer.insertBefore(draggable.parentElement, container);
+
+                let sortCount = 0;
+                for (let el of rootContainer.children) {
+                    el.children[0].children[1].dataset.categorySortedNum = ++sortCount;
+                }
+
+                modifyCategoryDTO.setModCategorySortedNum(modifiedCategory.categorySortedNum);
+                modifyDTOList.push(modifyCategoryDTO);
+
+            } else if (draggable.className.endsWith("second dragging") && afterElement.className.endsWith("first")
+                && e.clientY - afterElement.getBoundingClientRect().top < 27) {
+                //하위가 상위로 이동
+                modifiedCategory.categoryLayer = "FIRST";
+                modifiedCategory.superCategoryName = "none";
+                draggable.className = "category first";
+
+                modifyCategoryDTO.setModSuperCategoryName("none")
+                    .setModCategoryLayer("FIRST");
+
+                const firstCategoryContainer = $('.spare').clone(true,true);
+                console.log(firstCategoryContainer);
+                firstCategoryContainer.append(draggable);
+
+                rootContainer.insertBefore(firstCategoryContainer, container);
+
+                let sortCount = 0;
+                for (let el of rootContainer.children) {
+                    el.children[0].children[1].dataset.categorySortedNum = ++sortCount;
+                }
+                sortCount = 0;
+                for (let el of draggableParent.children) {
+                    if (!el.isEqualNode(draggableParent.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+
+                modifyCategoryDTO.setModCategorySortedNum(modifiedCategory.categorySortedNum);
+
+                modifyDTOList.push(modifyCategoryDTO);
+            } else if (draggable.className.endsWith("second dragging") && afterElement.className.endsWith("list")
+                && draggable.parentElement === afterElement.previousElementSibling) {
+
+                //같은 상위 내의 하위가 가장 아래로 이동
+                console.log("같은 상위 내의 하위가 가장 아래로 이동");
+
+                draggable.parentElement.append(draggable);
+
+                let sortCount = 0;
+                for (let el of draggableParent.children) {
+                    if (!el.isEqualNode(draggableParent.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+
+                modifyCategoryDTO.setModCategorySortedNum(modifiedCategory.categorySortedNum);
+
+                modifyDTOList.push(modifyCategoryDTO);
+
+            } else if (draggable.className.endsWith("second dragging") && afterElement.className.endsWith("list")) {
+                //다른 상위 내의 하위가 가장 아래로 이동
+                console.log("다른 상위 내의 하위가 다른 상위의 가장 아래로 이동");
+                modifiedCategory.superCategoryName = container.children[0].children[1].dataset.categoryName;
+
+                modifyCategoryDTO.setModSuperCategoryName(modifiedCategory.superCategoryName);
+
+                afterElement.previousElementSibling.append(draggable);
+
+                let sortCount = 0;
+                for (let el of draggableParent.children) {
+                    if (!el.isEqualNode(draggableParent.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+                sortCount = 0;
+                for (let el of container.children) {
+                    if (!el.isEqualNode(container.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+
+                modifyCategoryDTO.setModCategorySortedNum(modifiedCategory.categorySortedNum)
+                    .setModSuperCategoryName(container.children[0].children[1].dataset.categoryName);
+
+                modifyDTOList.push(modifyCategoryDTO);
+            } else {
+                container.insertBefore(draggable, afterElement);
+
+                let sortCount = 0;
+                for (let el of draggableParent.children) {
+                    if (!el.isEqualNode(draggableParent.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+                sortCount = 0;
+                for (let el of container.children) {
+                    if (!el.isEqualNode(container.children[0])) {
+                        el.children[1].dataset.categorySortedNum = ++sortCount;
+                    }
+                }
+                modifyCategoryDTO.setModCategorySortedNum(modifiedCategory.categorySortedNum);
+
+                if (draggable.parentElement.isEqualNode(draggableParent)) {
+                    console.log("같은 상위 내의 정렬.");
+                } else {
+                    console.log("다른 상위로 이동해서 정렬");
+                    modifyCategoryDTO.setModSuperCategoryName(container.children[0].children[1].dataset.categoryName);
+                }
+                modifyDTOList.push(modifyCategoryDTO);
+            }
+        })
+    });
+</script>
 </html>

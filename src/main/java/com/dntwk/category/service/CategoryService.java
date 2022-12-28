@@ -1,14 +1,14 @@
 package com.dntwk.category.service;
 
-import com.dntwk.category.dto.CreateCategoryDTO;
-import com.dntwk.category.dto.ModifyCategoryDTO;
-import com.dntwk.category.dto.SortedCategoryDTO;
-import com.dntwk.category.dto.SubSortedCategoryDTO;
+import com.dntwk.category.dto.*;
 import com.dntwk.category.entity.Category;
 import com.dntwk.category.repository.CategoryRepository;
 import com.dntwk.comm.converter.category.CategoryLayer;
 import com.dntwk.comm.exception.NotFoundSuchColumnException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -25,7 +25,7 @@ public class CategoryService {
     private final EntityManager em;
 
     @Transactional
-    public void modifyCategoryCommender(Queue<ModifyCategoryDTO> modifyCategoryDTOQueue) {
+    public void modifyCategoryCommender(List<ModifyCategoryDTO> modifyCategoryDTOQueue) {
         for(ModifyCategoryDTO modifyCategoryDTO : modifyCategoryDTOQueue){
             switch (modifyCategoryDTO.getPostRequestIdentifier()){
                 case NAME: modifyCategoryName(modifyCategoryDTO); break;
@@ -35,15 +35,18 @@ public class CategoryService {
         }
     }
 
+
+    @Cacheable("list")
     public List<SortedCategoryDTO> getCategoryList(){
         List<SortedCategoryDTO> sortedCategoryDTOList = new ArrayList<>();
         List<Category> EntityList = categoryRepository.findAllByCategoryLayerOrderByCategorySortedNum(CategoryLayer.FIRST);
         for (Category category : EntityList) {
             SortedCategoryDTO sortedCategoryDTO = new SortedCategoryDTO();
             sortedCategoryDTO.setCategoryName(category.getCategoryName());
+            sortedCategoryDTO.setCategoryIdx(category.getCategoryIdx());
             sortedCategoryDTOList.add(sortedCategoryDTO);
         }
-        TypedQuery<SubSortedCategoryDTO> query = em.createQuery("select new com.dntwk.category.dto.SubSortedCategoryDTO(d.categoryName,c.categoryName) from Category c join Category d " +
+        TypedQuery<SubSortedCategoryDTO> query = em.createQuery("select new com.dntwk.category.dto.SubSortedCategoryDTO(d.categoryIdx,d.categoryName,c.categoryName) from Category c join Category d " +
                 "on c.categoryLayer = :layer and c.categoryName = d.superCategoryName " +
                 "order by c.categorySortedNum,d.categorySortedNum", SubSortedCategoryDTO.class);
         query.setParameter("layer",CategoryLayer.FIRST);
@@ -59,6 +62,7 @@ public class CategoryService {
         return sortedCategoryDTOList;
     }
 
+    @CacheEvict("list")
     public void createCategory(CreateCategoryDTO createCategoryDTO) {
         Integer countColumn = categoryRepository.countBySuperCategoryName("none");
         createCategoryDTO.setCategorySortedNum(countColumn+1);
@@ -66,19 +70,22 @@ public class CategoryService {
                 .orElseGet(() -> categoryRepository.save(createCategoryDTO.toEntity()));
     }
 
+    @CacheEvict("list")
     public void modifyCategoryName(ModifyCategoryDTO modifyCategoryDTO) {
-        categoryRepository.findByCategoryNameAndSuperCategoryName(modifyCategoryDTO.getModCategoryName(), modifyCategoryDTO.getSuperCategoryName())
-                .ifPresentOrElse(x -> x.modCategoryName(modifyCategoryDTO.getCategoryName()), () -> {
+        categoryRepository.findByCategoryNameAndSuperCategoryName(modifyCategoryDTO.getCategoryName(), modifyCategoryDTO.getSuperCategoryName())
+                .ifPresentOrElse(x -> x.modCategoryName(modifyCategoryDTO.getModCategoryName()), () -> {
                     throw new NotFoundSuchColumnException();
                 });
     }
 
+    @CacheEvict("list")
     public void modifyCategorySort(ModifyCategoryDTO modifyCategoryDTO) {
         List<Category> categoryList = categoryRepository.findAllBySuperCategoryName(modifyCategoryDTO.getSuperCategoryName());
         if (categoryList.size() > 0) {
-            categoryList.stream().filter(category -> category.getCategorySortedNum() < modifyCategoryDTO.getModCategorySortedNum())
+            categoryList.stream().filter(category -> category.getCategorySortedNum() < modifyCategoryDTO.getCategorySortedNum())
                     .filter(category -> category.getCategorySortedNum() >= modifyCategoryDTO.getModCategorySortedNum())
                     .forEach(category -> category.modCategorySortedNum(category.getCategorySortedNum() + 1));
+
             categoryList.stream().filter(category -> category.getCategoryName().equals(modifyCategoryDTO.getCategoryName()))
                     .findAny()
                     .ifPresentOrElse(category -> category.modCategorySortedNum(modifyCategoryDTO.getModCategorySortedNum()),
@@ -90,6 +97,7 @@ public class CategoryService {
         }
     }
 
+    @CacheEvict("list")
     public void modifyCategoryLayerAndSort(ModifyCategoryDTO modifyCategoryDTO) {
         List<Category> modCategoryList = categoryRepository.findAllBySuperCategoryName(modifyCategoryDTO.getModSuperCategoryName());
         modCategoryList.stream().filter(category -> category.getCategorySortedNum() >= modifyCategoryDTO.getModCategorySortedNum())
@@ -108,5 +116,22 @@ public class CategoryService {
                 }, () -> {
                     throw new NotFoundSuchColumnException();
                 });
+    }
+
+    public List<CategoryDTO> getCategoryListWithIdx(){
+        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll(Sort.by(Sort.Direction.ASC,"categoryLayer","categorySortedNum"));
+        //question> how to change n^2 to 2n
+        for(Category category : categoryList){
+            if(category.getCategoryLayer().equals(CategoryLayer.FIRST)){
+                categoryDTOList.add(new CategoryDTO(category));
+                for(Category subCategory : categoryList){
+                    if(subCategory.getCategoryLayer().equals(CategoryLayer.SECOND)&&subCategory.getSuperCategoryName().equals(category.getCategoryName())){
+                        categoryDTOList.add(new CategoryDTO(subCategory));
+                    }
+                }
+            }
+        }
+        return categoryDTOList;
     }
 }

@@ -2,13 +2,17 @@ package com.dntwk.user.dto;
 
 
 import com.dntwk.comm.converter.usergrade.UserGrade;
+import com.dntwk.user.entity.Authority;
 import com.dntwk.user.entity.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
+import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 @Builder
 public class CreateUserDTO {
@@ -20,23 +24,18 @@ public class CreateUserDTO {
 
     private String userNickname;
 
-    private UserGrade userGrade;
-
     private Date createDt;
-
-    private String createId;
 
     @Setter
     private String createIp;
 
-    public User toEntity(){
+    public User toEntity(PasswordEncoder passwordEncoder, Set<Authority> authorities){
         return User.builder()
-                .userId(this.userId)
-                .userPwd(this.userPwd)
-                .userNickname(this.userNickname)
-                .userGrade(this.userGrade)
+                .userId(userId)
+                .userPwd(passwordEncoder.encode(userPwd))
+                .userNickname(userNickname)
+                .userAuthorities(authorities)
                 .createDt(new Date())
-                .createId(this.userId)
                 .createIp(createIp)
                 .build();
     }

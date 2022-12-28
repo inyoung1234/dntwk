@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class SubSortedCategoryDTO {
+    private Long categoryIdx;
     private String categoryName;
     private String superCategoryName;
 }

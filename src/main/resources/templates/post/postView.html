@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/css/uikit.min.css"/>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <link rel="shortcut icon" type="image/x-icon"
+          href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
+    <title>웃자</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="/css/article.css">
+</head>
+<body>
+<div id="jb-container">
+    <div id="menu-icon-container">
+        <img src="https://i.ibb.co/QcPLCg3/menu-icon-removebg-preview.png" alt="menu-icon-removebg-preview"
+             id="menu-icon" width="50px">
+    </div>
+    <div id="middle-container">
+
+        <aside id="sidebar">
+            <div class="">
+                <a href="/sign">
+                    로그인
+                </a>
+            </div>
+            <div class="profile">
+                <img class="thumbnail"
+                     data-sizes="auto"
+                     width="100"
+                     height="100"
+                     alt="InYoung"
+                     sizes="53px"
+                     src="https://i.postimg.cc/15ckn1y7/cat-2083492-960-720.jpg">
+                <div class="title">InYoung</div>
+            </div>
+            <div class="counter">
+                <div class="today">
+                    <div class="cnt-item">
+                        <div class="title">어제</div>
+                        <div class="cnt" th:text="${visitorCounting.yesterday}"></div>
+                    </div>
+                    <div class="cnt-item">
+                        <div class="title">오늘</div>
+                        <div class="cnt" th:text="${visitorCounting.today}">22</div>
+                    </div>
+                </div>
+                <div class="total">
+                    <div class="cnt-item">
+                        <div class="title">전체 방문자</div>
+                        <div class="cnt" th:text="${visitorCounting.total}">1452</div>
+                    </div>
+                </div>
+            </div>
+            <div class="search">
+                <div class="uk-search uk-search-default">
+                    <span uk-search-icon></span>
+                    <label for="search" style="display: none">검색</label>
+                    <input id="search" class="uk-search-input" type="search" placeholder="">
+                </div>
+            </div>
+
+            <div th:if="${categoryList}">
+                <ul th:each="categories : ${categoryList}">
+                    <li>
+                        <a th:text="${categories.categoryName}" th:href="@{|/category/${categories.categoryName}|}"></a>
+                    </li>
+                    <ul th:if="${categories.subCategoryList}" class="subCategoryList">
+                        <li th:each="subCategories : ${categories.subCategoryList}">
+                            <a th:text="${subCategories.categoryName}"
+                            th:href="@{|/category/${subCategories.categoryName}|}"></a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        </aside>
+        <div id="content-wrapper">
+            <div id="content" th:if="${postContents}">
+                <div class="contents-header">
+                    <a class="txt_category" href="#"><span class="inner-g" th:text="${postContents.postCategory}"></span></a>
+                    <h1 class="contents-name" th:text="${postContents.postName}"></h1>
+                    <div class="contents-date"><span th:text="${postContents.createDt}"></span></div>
+                </div>
+                <div class="contents-body"  th:text="${postContents.postContents}">
+                </div>
+                <div class="comment">
+                    <strong class="start">댓글 <span class="comment-count"></span></strong>
+                    <hr/>
+                    <div class="comment-list" th:if="${commentList}">
+                        <ul>
+                            <li>
+                                <div th:each="${commentList}">
+                                    <div class="commenter" th:text="${commentList.commentUserNickname}">이름</div>
+                                    <div class="comment"><p th:text="${commentList.commentContent}">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                        Aenean nec mollis nulla. Phasellus
+                                        lacinia
+                                        tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada.
+                                        Aenean et nibh eu
+                                        purus
+                                        scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam
+                                        condimentum varius purus
+                                        ut
+                                        ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing
+                                        risus.</p></div>
+                                    <div class="comment-date" th:text="${commentList.createDt}">2012-12-12</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <form class="comment-form">
+                            <label>
+                                <textarea placeholder="댓글을 입력해주세요." spellcheck="false"></textarea>
+                            </label>
+                            <div class="comment-option">
+                                <div>
+                                    <input id="comment-hidden" type="checkbox"><label for="comment-hidden">비밀글</label>
+                                </div>
+                                <div>
+                                    <button uk-margin class="uk-button uk-button-default uk-button-small">등록</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="relate-category" th:if="${relatedPostList}">
+                    <div class="title" th:text="${relatedPostList.postCategory}">
+                    </div>
+                    <div class="article-list" th:each="${relatedPostList}">
+                        <div class="article-list one">
+                            <div class="article-title" th:text="${relatedPostList.postName}">제목123</div>
+                            <div class="article-date" th:text="${relatedPostList.createDt}">2022.2.2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <p>Copyright</p>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/js/uikit-icons.min.js"></script>
+</html>

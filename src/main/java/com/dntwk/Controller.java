@@ -1,26 +1,26 @@
 package com.dntwk;
 
-import com.dntwk.category.dto.CreateCategoryDTO;
-import com.dntwk.category.service.CategoryService;
-import com.dntwk.comm.converter.category.CategoryLayer;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.ModelAndView;
 
-@RequiredArgsConstructor
 @org.springframework.stereotype.Controller
 public class Controller {
 
-    private final CategoryService categoryService;
 
-    @GetMapping("/")
-    public String main(){
-//        categoryService.createCategory(CreateCategoryDTO.builder().categoryLayer(CategoryLayer.FIRST).categoryName("1")
-//                .superCategoryName("none").build());
-    return "main";
+    @GetMapping("/reissue")
+    public String reissuePage(ModelAndView modelAndView){
+        return "/reissue-page";
     }
+
+    @GetMapping("/sign")
+    public String sign(){
+        return "/sign/signup";
+    }
+
 
     @GetMapping("/admin")
     public String admin(){
-        return "/admin/admin-directory";
+        return "/admin/admin-main";
     }
 }

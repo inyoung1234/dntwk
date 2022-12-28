@@ -3,6 +3,7 @@ package com.dntwk.comment.entity;
 import com.dntwk.comm.BaseEntity;
 import com.dntwk.post.entity.Post;
 import com.dntwk.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,28 @@ import javax.persistence.*;
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_idx")
     private Long commentIdx;
 
+    @JsonIgnore
     @JoinColumn(name = "comment_post_idx")
     @ManyToOne
     private Post commentPost;
+
+    private String commentContent;
+
+    private boolean commentHide;
+
+    private boolean commentDeleted;
+
+    private Long commentSuperCommentIdx;
+
+    private String commentGrade;
+
+    @JsonIgnore
+    @JoinColumn(name = "comment_user")
+    @ManyToOne
+    private User commentUser;
+
 
     public void setCommentPost(Post commentPost) {
         if (this.commentPost != null) {
@@ -33,31 +50,11 @@ public class Comment extends BaseEntity {
         getCommentPost().getCommentList().add(this);
     }
 
-    @JoinColumn(name = "comment_user")
-    @ManyToOne
-    private User commentUser;
-
     public void setCommentUser(User commentUser) {
         if (this.commentUser != null) {
             this.commentUser.getCommentList().remove(this);
         }
         this.commentUser = commentUser;
         getCommentUser().getCommentList().add(this);
-
     }
-
-    @Column
-    private String commentContent;
-
-    @Column
-    private boolean commentHide;
-
-    @Column
-    private boolean commentDeleted;
-
-    @Column
-    private Long commentSuperCommentIdx;
-
-    @Column
-    private String commentGrade;
 }

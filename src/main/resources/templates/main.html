@@ -1,12 +1,42 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/css/uikit.min.css"/>
     <meta charset="UTF-8" name="viewport"
           content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
     <link rel="shortcut icon" type="image/x-icon"
           href="https://farm66.staticflickr.com/65535/52426774298_021f5dfcb4_m.jpg">
     <title>웃자</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="/css/article.css">
+    <style>
+        #content-wrapper {
+            margin-top: 7rem;
+            margin-bottom: 7rem;
+        }
+
+        .postList {
+            border-top: 1px solid rgb(213, 194, 194);
+            border-bottom: 1px solid rgb(213, 194, 194);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            font-size: 20px;
+        }
+
+        .post-category {
+            text-align: right;
+        }
+
+        .post-info {
+            text-align: right;
+        }
+    </style>
 </head>
 <body>
 <div id="jb-container">
@@ -14,49 +44,93 @@
         <img src="https://i.ibb.co/QcPLCg3/menu-icon-removebg-preview.png" alt="menu-icon-removebg-preview"
              id="menu-icon" width="50px">
     </div>
-    <div class="header" id="header">
-        <h2>Responsive Layout</h2>
-    </div>
     <div id="middle-container">
-        <div id="content">
-            <h2>Content</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        </div>
 
-        <div id="sidebar" th:if="${categoryList}">
-            <ul th:each="categories : ${categoryList}">
-                <li th:text="${categories.categoryName}"></li>
-                <ul th:each="subCategories : ${categories.subCategoryList}">
-                    <li th:text="${subCategories.categoryName}"></li>
+        <aside id="sidebar">
+            <div class="">
+                <a href="/sign">
+                    로그인
+                </a>
+            </div>
+            <div class="">
+                <a href="/post/write">
+                    글쓰기
+                </a>
+            </div>
+            <div class="profile">
+                <img class="thumbnail"
+                     data-sizes="auto"
+                     width="100"
+                     height="100"
+                     alt="InYoung"
+                     sizes="53px"
+                     src="https://i.postimg.cc/15ckn1y7/cat-2083492-960-720.jpg">
+                <div class="title">InYoung</div>
+            </div>
+            <div class="counter">
+                <div class="today">
+                    <div class="cnt-item">
+                        <div class="title">어제</div>
+                        <div class="cnt" th:text="${visitorCounting.yesterday}"></div>
+                    </div>
+                    <div class="cnt-item">
+                        <div class="title">오늘</div>
+                        <div class="cnt" th:text="${visitorCounting.today}">22</div>
+                    </div>
+                </div>
+                <div class="total">
+                    <div class="cnt-item">
+                        <div class="title">전체 방문자</div>
+                        <div class="cnt" th:text="${visitorCounting.total}">1452</div>
+                    </div>
+                </div>
+            </div>
+            <div class="search">
+                <div class="uk-search uk-search-default">
+                    <span uk-search-icon></span>
+                    <label for="search" style="display: none">검색</label>
+                    <input id="search" class="uk-search-input" type="search" placeholder="">
+                </div>
+            </div>
+
+            <div th:if="${categoryList}">
+                <ul th:each="categories : ${categoryList}">
+                    <li>
+                        <a th:text="${categories.categoryName}"
+                           th:href="@{|/view/post-list/${categories.categoryIdx}|}"></a>
+                    </li>
+                    <ul th:if="${categories.subCategoryList}" class="subCategoryList">
+                        <li th:each="subCategories : ${categories.subCategoryList}">
+                            <a th:text="${subCategories.categoryName}"
+                               th:href="@{|/view/post-list/${subCategories.categoryIdx}|}"></a>
+                        </li>
+                    </ul>
                 </ul>
-            </ul>
+            </div>
+        </aside>
+        <div id="content-wrapper">
+            <div th:if="${postList}">
+                <div th:each="list : ${postList}" class="postList">
+                    <a th:href="@{|/view/post/${list.postIdx}|}">
+                        <div th:text="${list.postName}" class="post-title"></div>
+                    </a>
+                    <div class="post-category">
+                        <span th:text="${list.postCategory}"></span>
+                    </div>
+                    <div class="post-info">
+                        <span th:text="${list.createDt}"></span>
+                        <span th:text="${list.postUser}"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
     <div id="footer">
         <p>Copyright</p>
     </div>
 </div>
 </body>
-<script src="/js/header.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.15/dist/js/uikit-icons.min.js"></script>
 </html>

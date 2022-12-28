@@ -15,11 +15,9 @@ public class AddDirectoryListInterceptor implements HandlerInterceptor {
 
     private final CategoryService categoryService;
 
-
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
-
         if (modelAndView != null) {
             modelAndView.addObject("categoryList",categoryService.getCategoryList());
         }

@@ -8,6 +8,7 @@ import java.util.List;
 @Setter
 @Getter
 public class SortedCategoryDTO {
+    private Long categoryIdx;
     private String categoryName;
     private List<SubSortedCategoryDTO> subCategoryList;
 }

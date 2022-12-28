@@ -2,7 +2,9 @@ package com.dntwk.comment.service;
 
 import com.dntwk.comment.dto.CommentDTO;
 import com.dntwk.comment.dto.CreateCommentDTO;
+import com.dntwk.comment.entity.Comment;
 import com.dntwk.comment.repository.CommentRepository;
+import com.dntwk.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -20,20 +23,9 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final EntityManagerFactory entityManagerFactory;
 
     public List<CommentDTO> getCommentList(Long postIdx){
-        EntityManager em = entityManagerFactory.createEntityManager();
-        EntityTransaction entityTransaction = em.getTransaction();
-        entityTransaction.begin();
-        TypedQuery<CommentDTO> query =
-                em.createQuery("Select new com.dntwk.comment.dto.CommentDTO(c.commentIdx,c.commentUser.userNickname,c.commentContent,c.commentHide,c.commentSuperCommentIdx,c.commentGrade) " +
-                        "FROM Comment c where c.commentPost=:postIdx", CommentDTO.class);
-        query.setParameter("postIdx",postIdx);
-        List<CommentDTO> list = query.getResultList();
-        entityTransaction.commit();
-        em.close();
-        return list;
+        return commentRepository.findAllByCommentPost(Post.builder().postIdx(postIdx).build()).stream().map(e-> new CommentDTO().entityToDTO(e)).collect(Collectors.toList());
     }
 
     public List<CommentDTO> createComment(CreateCommentDTO createCommentDTO){

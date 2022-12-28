@@ -5,6 +5,9 @@ import com.dntwk.comm.converter.usergrade.UserGrade;
 import com.dntwk.comm.converter.usergrade.UserGradeAttributeConverter;
 import com.dntwk.comment.entity.Comment;
 import com.dntwk.post.entity.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +15,10 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,7 +47,26 @@ public class User extends BaseEntity {
     @Column(name="user_nickname")
     private String userNickname;
 
-    @Convert(converter= UserGradeAttributeConverter.class)
-    @Column(name="user_grade")
-    private UserGrade userGrade;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            joinColumns = {@JoinColumn(name="user_idx",referencedColumnName = "user_idx")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name",referencedColumnName = "authority_name")}
+    )
+    private Set<Authority> userAuthorities = new HashSet<>();
+
+
+    public String getAuthoritiesToString() {
+        return this.getUserAuthorities().stream()
+                .map(Authority::getAuthorityName)
+                .collect(Collectors.joining(","));
+    }
+
+    public void addAuthority(Authority authority) {
+        this.getUserAuthorities().add(authority);
+    }
+
+    public void removeAuthority(Authority authority) {
+        this.getUserAuthorities().remove(authority);
+    }
 }

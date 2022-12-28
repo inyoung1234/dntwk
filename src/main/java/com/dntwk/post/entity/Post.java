@@ -4,6 +4,7 @@ import com.dntwk.comm.BaseEntity;
 import com.dntwk.comment.entity.Comment;
 import com.dntwk.category.entity.Category;
 import com.dntwk.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long postIdx;
 
+    @JsonIgnore
     @JoinColumn(name="post_user")
     @ManyToOne
     private User postUser;
@@ -36,6 +38,7 @@ public class Post extends BaseEntity {
         getPostUser().getPostList().add(this);
     }
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn
     private Category postCategory;
