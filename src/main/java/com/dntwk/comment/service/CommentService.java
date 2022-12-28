@@ -4,8 +4,10 @@ import com.dntwk.comment.dto.CommentDTO;
 import com.dntwk.comment.dto.CreateCommentDTO;
 import com.dntwk.comment.entity.Comment;
 import com.dntwk.comment.repository.CommentRepository;
+import com.dntwk.filter.LoginUser;
 import com.dntwk.post.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -21,10 +23,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-
+    private final LoginUser loginUser;
     private final CommentRepository commentRepository;
 
     public List<CommentDTO> getCommentList(Long postIdx){
+        System.out.println(loginUser.getUserEmail());
         return commentRepository.findAllByCommentPost(Post.builder().postIdx(postIdx).build()).stream().map(e-> new CommentDTO().entityToDTO(e)).collect(Collectors.toList());
     }
 

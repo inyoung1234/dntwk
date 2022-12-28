@@ -22,11 +22,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.lang.invoke.SwitchPoint;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -160,5 +158,20 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) { // 만료된 토큰이 더라도 일단 파싱을 함
             return e.getClaims();
         }
+    }
+
+    public List<UserGrade> getAuthenticationToUserGrade(String accessToken) throws BizException {
+
+        // 토큰 복호화
+        Claims claims = parseClaims(accessToken);
+
+        if (claims.get(AUTHORITIES_KEY) == null || !StringUtils.hasText(claims.get(AUTHORITIES_KEY).toString())) {
+            throw new BizException(AuthorityExceptionType.NOT_FOUND_AUTHORITY); // 유저에게 아무런 권한이 없습니다.
+        }
+
+        // 클레임에서 권한 정보 가져오기
+        return Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(UserGrade::valueOf)
+                        .collect(Collectors.toList());
     }
 }
