@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @Component
 public class LoginUser {
-    private String UserEmail;
+    private String userEmail;
     private List<UserGrade> userGrade;
 }

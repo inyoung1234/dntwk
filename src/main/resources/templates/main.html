@@ -47,12 +47,13 @@
     <div id="middle-container">
 
         <aside id="sidebar">
-            <div>
+            <div th:if="${userInfo}">
                 <a href="/sign">
                     로그인
                 </a>
             </div>
-            <div class="">
+            <div th:if="!${userInfo}">
+                <div th:each="user :${userInfo}" th:text="${user.userEmail}"></div>
                 <a href="/post/write">
                     글쓰기
                 </a>
