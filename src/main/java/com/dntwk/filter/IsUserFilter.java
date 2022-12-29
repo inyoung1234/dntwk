@@ -35,7 +35,6 @@ public class IsUserFilter extends OncePerRequestFilter {
                     loginUser.setUserEmail(jwtTokenProvider.getMemberEmailByToken(token));
                     loginUser.setUserGrade(jwtTokenProvider.getAuthenticationToUserGrade(token));
                     filterChain.doFilter(request, response);
-                    request.setAttribute("userInfo",loginUser);
                 } else if (flag == 2) { // 토큰 만료
                     response.setContentType("application/json");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
