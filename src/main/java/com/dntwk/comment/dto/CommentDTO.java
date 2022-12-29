@@ -1,10 +1,7 @@
 package com.dntwk.comment.dto;
 
 import com.dntwk.comment.entity.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -15,21 +12,15 @@ import java.util.Date;
 public class CommentDTO {
     private Long commentIdx;
     private String commentUserNickname;
+    private String commentUserEmail;
     private String commentContent;
     private boolean commentHide;
     private Long commentSuperCommentIdx;
     private String commentGrade;
     private Date createDt;
 
-    public CommentDTO entityToDTO(Comment comment){
-        this.commentIdx = comment.getCommentIdx();
-        this.commentUserNickname= comment.getCommentUser().getUserNickname();
-        this.commentContent= comment.getCommentContent();
-        this.commentHide=comment.isCommentHide();
-        this.commentSuperCommentIdx= comment.getCommentSuperCommentIdx();
-        this.commentGrade= comment.getCommentGrade();
-        this.createDt= comment.getCreateDt();
+    public CommentDTO deleteContent(){
+        this.commentContent="";
         return this;
     }
-
 }

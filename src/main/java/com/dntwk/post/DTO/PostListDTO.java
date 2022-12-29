@@ -12,13 +12,9 @@ import java.util.Date;
 @Getter
 public class PostListDTO {
     private Long postIdx;
-
     private String postUser;
-
     private String postName;
-
     private String postCategory;
-
     private Date createDt;
 
     public PostListDTO dtoBuilder(Post post){

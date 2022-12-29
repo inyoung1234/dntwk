@@ -26,8 +26,6 @@ public class IsUserFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("IsUserFilter 작동");
-        System.out.println(request.getServletPath());
         if (!request.getServletPath().startsWith("/auth")) {
             String token = Arrays.stream(request.getCookies()).filter(e -> e.getName().equals("dntwk")).findAny().orElse(new Cookie("dntwk", "")).getValue();
             if (StringUtils.hasText(token)) {
@@ -37,6 +35,7 @@ public class IsUserFilter extends OncePerRequestFilter {
                     loginUser.setUserEmail(jwtTokenProvider.getMemberEmailByToken(token));
                     loginUser.setUserGrade(jwtTokenProvider.getAuthenticationToUserGrade(token));
                     filterChain.doFilter(request, response);
+                    request.setAttribute("userInfo",loginUser);
                 } else if (flag == 2) { // 토큰 만료
                     response.setContentType("application/json");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);

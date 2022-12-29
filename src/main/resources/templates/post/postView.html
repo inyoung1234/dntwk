@@ -12,6 +12,11 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
     <link rel="stylesheet" type="text/css" href="/css/article.css">
+    <style>
+        .article-list{
+            border-bottom: 1px solid rgb(213, 194, 194);
+        }
+    </style>
 </head>
 <body>
 <div id="jb-container">
@@ -66,12 +71,13 @@
             <div th:if="${categoryList}">
                 <ul th:each="categories : ${categoryList}">
                     <li>
-                        <a th:text="${categories.categoryName}" th:href="@{|/category/${categories.categoryName}|}"></a>
+                        <a th:text="${categories.categoryName}"
+                           th:href="@{|/view/post-list/${categories.categoryIdx}|}"></a>
                     </li>
                     <ul th:if="${categories.subCategoryList}" class="subCategoryList">
                         <li th:each="subCategories : ${categories.subCategoryList}">
                             <a th:text="${subCategories.categoryName}"
-                            th:href="@{|/category/${subCategories.categoryName}|}"></a>
+                               th:href="@{|/view/post-list/${subCategories.categoryIdx}|}"></a>
                         </li>
                     </ul>
                 </ul>
@@ -80,31 +86,22 @@
         <div id="content-wrapper">
             <div id="content" th:if="${postContents}">
                 <div class="contents-header">
-                    <a class="txt_category" href="#"><span class="inner-g" th:text="${postContents.postCategory}"></span></a>
+                    <a class="txt_category" href="#"><span class="inner-g"
+                                                           th:text="${postContents.postCategory}"></span></a>
                     <h1 class="contents-name" th:text="${postContents.postName}"></h1>
                     <div class="contents-date"><span th:text="${postContents.createDt}"></span></div>
                 </div>
-                <div class="contents-body"  th:text="${postContents.postContents}">
+                <div class="contents-body" th:utext="${postContents.postContents}">
                 </div>
                 <div class="comment">
                     <strong class="start">댓글 <span class="comment-count"></span></strong>
                     <hr/>
-                    <div class="comment-list" th:if="${commentList}">
+                    <div class="comment-list" th:if="!${commentList.isEmpty()}">
                         <ul>
                             <li>
-                                <div th:each="${commentList}">
+                                <div th:each="commentList : ${commentList}">
                                     <div class="commenter" th:text="${commentList.commentUserNickname}">이름</div>
-                                    <div class="comment"><p th:text="${commentList.commentContent}">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        Aenean nec mollis nulla. Phasellus
-                                        lacinia
-                                        tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada.
-                                        Aenean et nibh eu
-                                        purus
-                                        scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam
-                                        condimentum varius purus
-                                        ut
-                                        ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing
-                                        risus.</p></div>
+                                    <div class="comment"><p th:text="${commentList.commentContent}"></div>
                                     <div class="comment-date" th:text="${commentList.createDt}">2012-12-12</div>
                                 </div>
                             </li>
@@ -126,10 +123,10 @@
                         </form>
                     </div>
                 </div>
-                <div class="relate-category" th:if="${relatedPostList}">
-                    <div class="title" th:text="${relatedPostList.postCategory}">
+                <div class="relate-category" th:if="!${relatedPostList.isEmpty()}">
+                    <div class="title">
                     </div>
-                    <div class="article-list" th:each="${relatedPostList}">
+                    <div class="article-list" th:each="relatedPostList : ${relatedPostList}">
                         <div class="article-list one">
                             <div class="article-title" th:text="${relatedPostList.postName}">제목123</div>
                             <div class="article-date" th:text="${relatedPostList.createDt}">2022.2.2</div>
